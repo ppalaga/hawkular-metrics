@@ -40,7 +40,7 @@ public class ValidQuerySyntaxTest {
 
     @Parameters(name = "validQuery: {0}")
     public static Iterable<Object[]> testValidQueries() throws Exception {
-        URL resource = Resources.getResource("influx/query/syntactically-correct-queries");
+        URL resource = Resources.getResource("influx/query/syntactically-correct-queries.iql");
         return FluentIterable //
             .from(Resources.readLines(resource, Charset.forName("UTF-8"))) //
             // Filter out comment lines
