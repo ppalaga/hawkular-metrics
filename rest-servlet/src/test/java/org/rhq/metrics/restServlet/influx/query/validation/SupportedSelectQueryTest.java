@@ -30,7 +30,7 @@ public class SupportedSelectQueryTest {
 
     @Parameters(name = "supportedQuery: {0}")
     public static Iterable<Object[]> testValidQueries() throws Exception {
-        URL resource = Resources.getResource("influx/query/supported-select-queries");
+        URL resource = Resources.getResource("influx/query/supported-select-queries.iql");
         return FluentIterable //
             .from(Resources.readLines(resource, Charset.forName("UTF-8"))) //
             // Filter out comment lines

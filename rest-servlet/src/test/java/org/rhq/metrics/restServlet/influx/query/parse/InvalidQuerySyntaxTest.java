@@ -24,7 +24,7 @@ public class InvalidQuerySyntaxTest {
 
     @Parameters(name = "invalidQuery: {0}")
     public static Iterable<Object[]> testValidQueries() throws Exception {
-        URL resource = Resources.getResource("influx/query/syntactically-incorrect-queries");
+        URL resource = Resources.getResource("influx/query/syntactically-incorrect-queries.iql");
         return FluentIterable //
             .from(Resources.readLines(resource, Charset.forName("UTF-8"))) //
             // Filter out comment lines
