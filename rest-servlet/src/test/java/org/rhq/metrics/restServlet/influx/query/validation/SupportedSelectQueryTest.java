@@ -37,7 +37,7 @@ public class SupportedSelectQueryTest {
             .filter(new Predicate<String>() {
                 @Override
                 public boolean apply(String input) {
-                    return !input.startsWith("#");
+                    return !input.startsWith("--");
                 }
             }) //
             .transform(new Function<String, Object[]>() {
