@@ -272,7 +272,7 @@
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>2.6</version>
+          <version>2.7-SNAPSHOT</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -300,8 +300,8 @@
               <version>[1.8,)</version>
             </requireJavaVersion>
             <requireNoRepositories/>
-            <requirePluginVersions/>
-          </rules>
+<!--             <requirePluginVersions/>
+ -->          </rules>
         </configuration>
       </plugin>
 
@@ -447,8 +447,11 @@
           </excludes>
           <mapping>
             <bowerrc>SLASHSTAR_STYLE</bowerrc>
+            <conf>SCRIPT_STYLE</conf>
             <cql>SLASHSTAR_STYLE</cql>
             <Dockerfile>SCRIPT_STYLE</Dockerfile>
+            <g4>SLASHSTAR_STYLE</g4>
+            <iql>DOUBLEDASHES_STYLE</iql>
             <jshintrc>SLASHSTAR_STYLE</jshintrc>
             <ts>SLASHSTAR_STYLE</ts>
           </mapping>
