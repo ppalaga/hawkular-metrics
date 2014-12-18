@@ -35,6 +35,18 @@
       </plugin>
 
       <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <configuration>
+          <excludes combine.children="append">
+            <exclude>src/main/webapp/bower_components/**</exclude>
+            <exclude>src/main/webapp/node_modules/**</exclude>
+            <exclude>src/main/webapp/node/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
