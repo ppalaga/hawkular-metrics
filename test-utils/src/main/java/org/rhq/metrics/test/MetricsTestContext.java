@@ -6,29 +6,24 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.joda.time.DateTime;
+
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ProtocolVersion;
 import com.datastax.driver.core.Session;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.Uninterruptibles;
 
-import org.joda.time.DateTime;
-
 /**
  * @author John Sanda
  */
-public class MetricsTest {
+public class MetricsTestContext {
 
     private static final long FUTURE_TIMEOUT = 3;
 
-    protected Session session;
+    protected final Session session;
 
-    private PreparedStatement truncateMetrics;
-
-    private PreparedStatement truncateCounters;
-
-    public void initSession() {
+    protected MetricsTestContext() {
         String nodeAddresses = System.getProperty("nodes", "127.0.0.1");
         Cluster cluster = new Cluster.Builder()
             .addContactPoints(nodeAddresses.split(","))
@@ -38,13 +33,6 @@ public class MetricsTest {
             .build();
         session = cluster.connect(getKeyspace());
 
-//        truncateMetrics = session.prepare("TRUNCATE metrics");
-//        truncateCounters = session.prepare("TRUNCATE counters");
-    }
-
-    protected void resetDB() {
-        session.execute(truncateMetrics.bind());
-        session.execute(truncateCounters.bind());
     }
 
     protected String getKeyspace() {
@@ -61,7 +49,11 @@ public class MetricsTest {
         return hour0().plusHours(hourOfDay);
     }
 
-    protected <V> V getUninterruptibly(ListenableFuture<V> future) throws ExecutionException, TimeoutException {
+    public Session getSession() {
+        return session;
+    }
+
+    public <V> V getUninterruptibly(ListenableFuture<V> future) throws ExecutionException, TimeoutException {
         return Uninterruptibles.getUninterruptibly(future, FUTURE_TIMEOUT, TimeUnit.SECONDS);
     }
 
