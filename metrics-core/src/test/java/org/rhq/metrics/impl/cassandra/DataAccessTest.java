@@ -2,8 +2,8 @@ package org.rhq.metrics.impl.cassandra;
 
 import static java.util.Arrays.asList;
 import static org.joda.time.DateTime.now;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
@@ -18,10 +18,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.rhq.metrics.core.AggregationTemplate;
 import org.rhq.metrics.core.Availability;
 import org.rhq.metrics.core.AvailabilityMetric;
@@ -56,7 +55,7 @@ public class DataAccessTest extends MetricsTest {
         truncateCounters = session.prepare("TRUNCATE counters");
     }
 
-    @BeforeMethod
+    @Before
     public void initMethod() {
         session.execute(truncateTenants.bind());
         session.execute(truncateNumericData.bind());
@@ -93,14 +92,14 @@ public class DataAccessTest extends MetricsTest {
         Tenant actual = getUninterruptibly(tenantFuture);
         Tenant expected = tenant1;
 
-        assertEquals(actual, expected, "The tenants do not match");
+        assertEquals("The tenants do not match", expected, actual);
     }
 
     @Test
     public void doNotAllowDuplicateTenants() throws Exception {
         getUninterruptibly(dataAccess.insertTenant(new Tenant().setId("tenant-1")));
         ResultSet resultSet = getUninterruptibly(dataAccess.insertTenant(new Tenant().setId("tenant-1")));
-        assertFalse(resultSet.wasApplied(), "Tenants should not be overwritten");
+        assertFalse("Tenants should not be overwritten", resultSet.wasApplied());
     }
 
     @Test
@@ -125,7 +124,7 @@ public class DataAccessTest extends MetricsTest {
             new NumericData(metric, start.getMillis(), 1.23)
         );
 
-        assertEquals(actual, expected, "The data does not match the expected values");
+        assertEquals("The data does not match the expected values", expected, actual);
     }
 
     @Test
@@ -154,7 +153,7 @@ public class DataAccessTest extends MetricsTest {
             new NumericData(metric, start.getMillis(), 1.23)
         );
 
-        assertEquals(actual, expected, "The data does not match the expected values");
+        assertEquals("The data does not match the expected values", expected, actual);
     }
 
 //    @Test
@@ -220,7 +219,7 @@ public class DataAccessTest extends MetricsTest {
         List<Counter> actual = getUninterruptibly(Futures.transform(queryFuture, new CountersMapper()));
         List<Counter> expected = asList(counter);
 
-        assertEquals(actual, expected, "The counters do not match");
+        assertEquals("The counters do not match", expected, actual);
     }
 
     @Test
@@ -239,7 +238,7 @@ public class DataAccessTest extends MetricsTest {
         ResultSetFuture queryFuture = dataAccess.findCounters(tenantId, group);
         List<Counter> actual = getUninterruptibly(Futures.transform(queryFuture, new CountersMapper()));
 
-        assertEquals(actual, expected, "The counters do not match the expected values");
+        assertEquals("The counters do not match the expected values", expected, actual);
     }
 
     @Test
@@ -256,7 +255,7 @@ public class DataAccessTest extends MetricsTest {
         List<Counter> actual = getUninterruptibly(Futures.transform(queryFuture, new CountersMapper()));
         List<Counter> expected = asList(c1, c2);
 
-        assertEquals(actual, expected, "The counters do not match the expected values when filtering by group");
+        assertEquals("The counters do not match the expected values when filtering by group", expected, actual);
     }
 
     @Test
@@ -274,8 +273,8 @@ public class DataAccessTest extends MetricsTest {
         List<Counter> actual = getUninterruptibly(Futures.transform(queryFuture, new CountersMapper()));
         List<Counter> expected = asList(c1, c3);
 
-        assertEquals(actual, expected,
-            "The counters do not match the expected values when filtering by group and by counter names");
+        assertEquals("The counters do not match the expected values when filtering by group and by counter names", expected,
+            actual);
     }
 
     @Test
@@ -293,7 +292,7 @@ public class DataAccessTest extends MetricsTest {
         List<Availability> actual = getUninterruptibly(dataFuture);
         List<Availability> expected = asList(new Availability(metric, start.getMillis(), "up"));
 
-        assertEquals(actual, expected, "The availability data does not match the expected values");
+        assertEquals("The availability data does not match the expected values", expected, actual);
     }
 
 }
