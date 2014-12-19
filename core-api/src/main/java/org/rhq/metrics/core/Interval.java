@@ -51,32 +51,20 @@ public class Interval {
         }
     }
 
-    public static final Interval NONE = new Interval(0, null) {
-        @Override
-        public String toString() {
-            return "";
-        }
+    public static final Interval NONE = new Interval(0, null);
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+    private final int length;
 
-            Interval interval = (Interval) o;
-            return interval.length == 0 && interval.units == null;
-        }
-
-        @Override
-        public int hashCode() {
-            return 51;
-        }
-    };
-
-    private int length;
-
-    private Units units;
+    private final Units units;
 
     public Interval(int length, Units units) {
+        if (length < 0) {
+            throw new IllegalArgumentException("Cannot create a new "+ Interval.class.getName() +" with negative length.");
+        }
+        if (length == 0) {
+            /* units do not matter for zero length */
+            units = null;
+        }
         this.length = length;
         this.units = units;
     }
@@ -90,7 +78,7 @@ public class Interval {
      * @throws java.lang.IllegalArgumentException if the string does not parse
      */
     public static Interval parse(String s) {
-        if (s.isEmpty()) {
+        if (s == null || s.isEmpty()) {
             return NONE;
         }
 
@@ -99,7 +87,12 @@ public class Interval {
             throw new IllegalArgumentException(s + " is not a valid interval. It must follow the pattern " +
                 INTERVAL_PATTERN.pattern());
         }
-        return new Interval(Integer.parseInt(matcher.group(1)), Units.fromCode(matcher.group(2)));
+        int length = Integer.parseInt(matcher.group(1));
+        if (length == 0) {
+            return NONE;
+        } else {
+            return new Interval(length, Units.fromCode(matcher.group(2)));
+        }
     }
 
 
@@ -117,15 +110,14 @@ public class Interval {
         if (o == null || getClass() != o.getClass()) return false;
 
         Interval interval = (Interval) o;
-
-        if (length != interval.length) return false;
-        if (units != interval.units) return false;
-
-        return true;
+        return this.length == interval.length && this.units == interval.units;
     }
 
     @Override
     public int hashCode() {
+        if (length == 0) {
+            return 0;
+        }
         int result = length;
         result = 31 * result + units.hashCode();
         return result;
@@ -133,6 +125,10 @@ public class Interval {
 
     @Override
     public String toString() {
-        return length + units.code;
+        if (length == 0) {
+            return "";
+        } else {
+            return length + units.code;
+        }
     }
 }
