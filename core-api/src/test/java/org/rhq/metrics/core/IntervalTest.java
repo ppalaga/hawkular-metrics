@@ -18,15 +18,15 @@ public class IntervalTest {
 
     @Test
     public void parseIntervals() {
-        assertEquals(new Interval(15, MINUTES), parse("15min"));
-        assertEquals(new Interval(1, HOURS), parse("1hr"));
+        assertEquals(new Interval(15, MINUTES), Interval.parse("15m"));
+        assertEquals(new Interval(1, HOURS), parse("1h"));
         assertEquals(new Interval(1, DAYS), parse("1d"));
 
         /* Zero interval without units is illegal */
         assertParseFails("0");
         /* Zero length with units is legal and equivalent to NONE */
-        assertEquals(Interval.NONE, parse("0min"));
-        assertEquals(Interval.NONE, parse("0hr"));
+        assertEquals(Interval.NONE, parse("0m"));
+        assertEquals(Interval.NONE, parse("0h"));
         assertEquals(Interval.NONE, parse("0d"));
 
         /* empty string and are equivalent to NONE */
@@ -36,9 +36,11 @@ public class IntervalTest {
         /* Negative intervals are illegal */
         assertParseFails("-1d");
 
+        assertParseFails("15min");
         assertParseFails("15minutes");
         assertParseFails("15 minutes");
         assertParseFails("min15");
+        assertParseFails("12hr");
         assertParseFails("12.2hr");
         assertParseFails("1d3min");
         assertParseFails("1d 3min");

@@ -1,7 +1,5 @@
 package org.rhq.metrics.core;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Describes an interval or duration intended to be used with aggregated metrics. An interval describes the frequency
@@ -22,31 +20,29 @@ import java.util.regex.Pattern;
  */
 public class Interval {
 
-    private static final Pattern INTERVAL_PATTERN = Pattern.compile("(\\d+)(min|hr|d)");
-
     public static enum Units {
-        MINUTES("min"),
+        MINUTES('m'),
 
-        HOURS("hr"),
+        HOURS('h'),
 
-        DAYS("d");
+        DAYS('d');
 
-        private String code;
+        private final char code;
 
-        private Units(String code) {
+        private Units(char code) {
             this.code = code;
         }
 
-        public String getCode() {
+        public char getCode() {
             return code;
         }
 
-        public static Units fromCode(String code) {
+        public static Units fromCode(char code) {
             switch (code) {
-                case "min": return MINUTES;
-                case "hr": return HOURS;
-                case "d": return DAYS;
-                default: throw new IllegalArgumentException(code + " is not a recognized unit");
+                case 'm': return MINUTES;
+                case 'h': return HOURS;
+                case 'd': return DAYS;
+                default: throw new IllegalArgumentException("'"+ code + "' is not a recognized unit");
             }
         }
     }
@@ -81,17 +77,24 @@ public class Interval {
         if (s == null || s.isEmpty()) {
             return NONE;
         }
-
-        Matcher matcher = INTERVAL_PATTERN.matcher(s);
-        if (!(matcher.matches() && matcher.groupCount() == 2)) {
-            throw new IllegalArgumentException(s + " is not a valid interval. It must follow the pattern " +
-                INTERVAL_PATTERN.pattern());
+        int lastIndex = s.length() - 1;
+        if (lastIndex <= 0) {
+            throw new IllegalArgumentException("Cannot parse an Interval out of a string '" + s
+                    + "' having length <= 1. The string must match the pattern (\\d+)[mhd]");
         }
-        int length = Integer.parseInt(matcher.group(1));
-        if (length == 0) {
-            return NONE;
-        } else {
-            return new Interval(length, Units.fromCode(matcher.group(2)));
+        char ch = s.charAt(lastIndex);
+        Units units = Units.fromCode(ch);
+        String number = s.substring(0, lastIndex);
+        try {
+            int length = Integer.parseUnsignedInt(number);
+            if (length == 0) {
+                return NONE;
+            } else {
+                return new Interval(length, units);
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("'" + s
+                    + "' is not a valid interval. It must match the pattern (\\d+)[mhd]", e);
         }
     }
 
@@ -128,7 +131,7 @@ public class Interval {
         if (length == 0) {
             return "";
         } else {
-            return length + units.code;
+            return ""+ length + units.code;
         }
     }
 }
