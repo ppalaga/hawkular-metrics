@@ -126,9 +126,6 @@
                   <value>${nodes}</value>
                 </property>
               </systemProperties>
-              <includes>
-                <include>**/*Suite.java</include>
-              </includes>
             </configuration>
           </plugin>
 
