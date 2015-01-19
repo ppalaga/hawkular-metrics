@@ -1,8 +1,8 @@
-# Each line in this file will be used as an unsupported sample
-# for org.rhq.metrics.restServlet.influx.query.validation.UnsupportedSelectQueryTest
-# Lines starting with the hash-sign are ignored
-#
-# two columns
+-- Each line in this file will be used as an unsupported sample
+-- for org.rhq.metrics.restServlet.influx.query.validation.UnsupportedSelectQueryTest
+-- Empty lines and ines starting with double dash are ignored
+--
+-- two columns
 select a,b from test
 # group by time only
 select a from test group by space(30s)

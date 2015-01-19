@@ -1,10 +1,9 @@
-# Each line in this file will be used as a syntactically incorrect sample
-# for org.rhq.metrics.restServlet.influx.query.InvalidQuerySyntaxTest
-# Lines starting with the hash-sign are ignored
-#
-# Next line is intentionally left blank to test the empty query case
+-- Each line in this file will be used as a syntactically incorrect sample
+-- for org.rhq.metrics.restServlet.influx.query.InvalidQuerySyntaxTest
+-- Empty lines and ines starting with double dash are ignored
+--
 
-# Missing from clause
+-- Missing from clause
 select 1
 # Name staring with digit
 select * frOm 1_sqlkd_j0504
